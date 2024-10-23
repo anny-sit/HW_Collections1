@@ -12,9 +12,9 @@ import java.util.List;
 @Service
 public class EmployeeService {
     private static final int AMOUNT = 10;
-    private static List<Employee> employees = new ArrayList<>();
+    private final List<Employee> employees = new ArrayList<>();
 
-    public static Employee add(String firstName, String lastName) {
+    public  Employee add(String firstName, String lastName) {
         if (employees.size() == AMOUNT) {
             throw new EmployeeStorageIsFullException();
         }
@@ -27,7 +27,7 @@ public class EmployeeService {
         }
     }
 
-    public static Employee find(String firstName, String lastName) {
+    public  Employee find(String firstName, String lastName) {
         for (Employee e : employees) {
             if (e.getFirstName().equals(firstName) && e.getLastName().equals(lastName)) {
                 return e;
@@ -36,7 +36,7 @@ public class EmployeeService {
         throw new EmployeeNotFoundException();
     }
 
-    public static Employee remove(String firstName, String lastName) {
+    public  Employee remove(String firstName, String lastName) {
         Employee tmp = find(firstName, lastName);
         employees.remove(tmp);
         return tmp;
