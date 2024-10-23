@@ -6,39 +6,52 @@ import pro.sky.collectonsHW1.exceptions.EmployeeAlreadyAddedException;
 import pro.sky.collectonsHW1.exceptions.EmployeeNotFoundException;
 import pro.sky.collectonsHW1.exceptions.EmployeeStorageIsFullException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class EmployeeService {
     private static final int AMOUNT = 10;
-    private final List<Employee> employees = new ArrayList<>();
+    private Map<String, Employee> employees = new HashMap<>();
 
-    public  Employee add(String firstName, String lastName) {
+    public EmployeeService() {
+        this.employees = new HashMap<>();
+    }
+
+    public Employee add(String firstName, String lastName) {
         if (employees.size() == AMOUNT) {
             throw new EmployeeStorageIsFullException();
         }
-        try {
-            find(firstName, lastName);
+        Employee emp = new Employee(firstName, lastName);
+        if (employees.containsKey(emp.getFullName())) {
             throw new EmployeeAlreadyAddedException();
-        } catch (EmployeeNotFoundException e) {
-            employees.add(new Employee(firstName, lastName));
-            return find(firstName, lastName);
         }
+        employees.put(emp.getFullName(), emp);
+        return emp;
     }
 
-    public  Employee find(String firstName, String lastName) {
-        for (Employee e : employees) {
-            if (e.getFirstName().equals(firstName) && e.getLastName().equals(lastName)) {
-                return e;
-            }
+    public Employee find(String firstName, String lastName) {
+        Employee emp = new Employee(firstName, lastName);
+
+        if (employees.containsKey(emp.getFullName())) {
+            return employees.get(emp.getFullName());
         }
+
+        throw new EmployeeNotFoundException();
+
+    }
+
+    public Employee remove(String firstName, String lastName) {
+        Employee emp = new Employee(firstName, lastName);
+
+        if (employees.containsKey(emp.getFullName())) {
+            return employees.remove(emp.getFullName());
+        }
+
         throw new EmployeeNotFoundException();
     }
 
-    public  Employee remove(String firstName, String lastName) {
-        Employee tmp = find(firstName, lastName);
-        employees.remove(tmp);
-        return tmp;
+    public Map<String, Employee> getEmployees() {
+        return employees;
     }
 }
