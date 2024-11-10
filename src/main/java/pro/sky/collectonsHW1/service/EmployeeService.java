@@ -12,17 +12,17 @@ import java.util.Map;
 @Service
 public class EmployeeService {
     private static final int AMOUNT = 10;
-    private Map<String, Employee> employees = new HashMap<>();
+    private Map<String, Employee> employees;
 
     public EmployeeService() {
         this.employees = new HashMap<>();
     }
 
-    public Employee add(String firstName, String lastName) {
+    public Employee add(String firstName, String lastName, double salary, int department) {
         if (employees.size() == AMOUNT) {
             throw new EmployeeStorageIsFullException();
         }
-        Employee emp = new Employee(firstName, lastName);
+        Employee emp = new Employee(firstName, lastName, salary, department);
         if (employees.containsKey(emp.getFullName())) {
             throw new EmployeeAlreadyAddedException();
         }
@@ -30,8 +30,8 @@ public class EmployeeService {
         return emp;
     }
 
-    public Employee find(String firstName, String lastName) {
-        Employee emp = new Employee(firstName, lastName);
+    public Employee find(String firstName, String lastName, double salary, int department) {
+        Employee emp = new Employee(firstName, lastName, salary, department);
 
         if (employees.containsKey(emp.getFullName())) {
             return employees.get(emp.getFullName());
@@ -41,8 +41,8 @@ public class EmployeeService {
 
     }
 
-    public Employee remove(String firstName, String lastName) {
-        Employee emp = new Employee(firstName, lastName);
+    public Employee remove(String firstName, String lastName, double salary, int department) {
+        Employee emp = new Employee(firstName, lastName, salary, department);
 
         if (employees.containsKey(emp.getFullName())) {
             return employees.remove(emp.getFullName());
